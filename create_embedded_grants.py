@@ -34,8 +34,7 @@ def create_grant_test_data(n_grants: int = 50):
     for i, item in enumerate(small_batch):
         item["embedding"] = embeddings[i]
 
-    os.makedirs("./data/", exist_ok=True)
-    with open("./data/test_grants.json", "wb") as f:
+    with open("./test_data/test_grants.json", "wb") as f:
         f.write(orjson.dumps(small_batch))
 
 
