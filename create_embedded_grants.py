@@ -29,14 +29,14 @@ def create_grant_test_data(n_grants: int = 50):
         reverse=True,
     )
     small_batch = current_grants[:n_grants]
-    embeddings = get_embedding(
-        [x["Description"] for x in small_batch],
-        [x["OpportunityID"] for x in small_batch],
-    )
+    embeddings = get_embedding([x["Description"] for x in small_batch])
+
+    for i, item in enumerate(small_batch):
+        item["embedding"] = embeddings[i]
 
     os.makedirs("./data/", exist_ok=True)
     with open("./data/test_grants.json", "wb") as f:
-        f.write(orjson.dumps(embeddings))
+        f.write(orjson.dumps(small_batch))
 
 
 if __name__ == "__main__":
