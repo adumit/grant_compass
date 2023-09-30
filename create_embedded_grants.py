@@ -40,7 +40,6 @@ def create_grant_test_data(n_grants: int = 50):
 
 
 if __name__ == "__main__":
-    # Add a command line option to specify the number of grants to create
     parser = argparse.ArgumentParser(description="Create a small amount of test data")
     parser.add_argument(
         "--num_grants",
