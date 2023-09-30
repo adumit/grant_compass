@@ -4,7 +4,7 @@
 - Run: `uvicorn api:app --reload`
 
 # Getting the data
-- Download the XML extract: https://www.grants.gov/xml-extract.html
+- Download the GrantsDBExtract20230926v2.zip XML extract: https://www.grants.gov/xml-extract.html
 - Create a folder called `data` at root and put the xml file there
 
 # Creating a virtual environment
