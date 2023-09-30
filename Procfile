@@ -1,0 +1,1 @@
+server: uvicorn api:app
