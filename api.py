@@ -15,7 +15,7 @@ async def root():
 
 @app.get("/search/")
 async def get_item(search_text: str):
-    with open("data/test_grants.json") as f:
+    with open("test_data/test_grants.json") as f:
         grant_embeddings = orjson.loads(f.read())
 
     top_indices = search_embeddings(
