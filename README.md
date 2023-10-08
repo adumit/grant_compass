@@ -2,6 +2,8 @@
 
 # To run locally:
 - Run: `uvicorn api:app --reload`
+- Navigate to the frontend folder `cd frontend`
+- Run: `npm start` (see the frontend Readme for more details)
 
 # Getting the data
 - Download the GrantsDBExtract20230926v2.zip XML extract: https://www.grants.gov/xml-extract.html
