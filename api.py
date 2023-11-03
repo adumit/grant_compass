@@ -3,7 +3,7 @@ import orjson
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from embed import get_embedding
+from pull_full_grants_data import get_full_grants_data
 from search_text import search_embeddings
 
 app = FastAPI()
@@ -20,6 +20,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.on_event("startup")
+async def startup_event():
+    # Load data into cache & download if necessary
+    get_full_grants_data()
+
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
@@ -27,8 +34,7 @@ async def root():
 
 @app.get("/search/")
 async def get_item(search_text: str):
-    with open("test_data/test_grants.json") as f:
-        grant_embeddings = orjson.loads(f.read())
+    grant_embeddings = get_full_grants_data()
 
     top_indices = search_embeddings(
         search_text, [g["embedding"] for g in grant_embeddings], top_n=10
