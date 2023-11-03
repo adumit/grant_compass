@@ -18,7 +18,7 @@ def convert_date(date_str: str):
 
 def create_grant_test_data(n_grants: int = 50):
     print("Reading in raw data...")
-    grants_data = xmltodict.parse(open("./data/GrantsDBExtract20230926v2.xml").read())
+    grants_data = xmltodict.parse(open("./data/GrantsDBExtract20231102v2.xml").read())
     print("Beginning to create embeddings...")
     today = date.today()
 
