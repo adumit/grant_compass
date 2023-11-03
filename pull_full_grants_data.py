@@ -5,6 +5,8 @@ import json
 import boto3
 from botocore.exceptions import NoCredentialsError
 
+INPUT_DIR = f"{os.path.dirname(__file__)}/data"
+
 
 def _download_file_from_s3(
     bucket_name: str, s3_object_key: str, local_file_name: str
@@ -26,7 +28,8 @@ def _download_file_from_s3(
 
 @functools.cache
 def get_full_grants_data() -> dict:
-    grant_data_path = "./data/full_grant_data.json"
+    os.makedirs(INPUT_DIR, exist_ok=True)
+    grant_data_path = f"{INPUT_DIR}/full_grant_data.json"
     if not os.path.exists(grant_data_path):
         _download_file_from_s3(
             "grant-compass-public",
