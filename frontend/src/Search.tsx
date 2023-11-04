@@ -11,7 +11,8 @@ export function Search() {
 
   useEffect(() => {
     if (query && query !== "") {
-      fetch(`http://localhost:8000/search/?search_text=${query}`)
+      const rootUrl = process.env.BACKEND_URL ?? "http://localhost:8000";
+      fetch(`${rootUrl}/search/?search_text=${query}`)
       .then(response => response.json())
       .then(setData);
 
