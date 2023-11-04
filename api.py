@@ -10,6 +10,7 @@ app = FastAPI()
 
 origins = [
     "http://localhost:3000",
+    "https://grantcompass-ui-f7e74ec26071.herokuapp.com",
 ]
 
 app.add_middleware(
