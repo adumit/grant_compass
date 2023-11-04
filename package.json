@@ -1,0 +1,6 @@
+{
+  "name": "grant_compass",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Empty package.json needed for Heroku build"
+}
