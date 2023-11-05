@@ -5,12 +5,14 @@ export interface OpportunityCardProps {
   opportunity: Opportunity;
 }
 
-export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
+export default function OpportunityCard({ opportunity, onCheckboxChange }: OpportunityCardProps & { onCheckboxChange: (opp: Opportunity, isChecked: boolean) => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
   const toggleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(e.target.checked);
+    // Call the passed callback with the opportunity ID and the checked state
+    onCheckboxChange(opportunity, e.target.checked);
   };
 
   // Separate the concerns by having the title only control the description
