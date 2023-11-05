@@ -8,6 +8,7 @@ import { Search } from "./Search";
 import "./index.css";
 import "./App.css"
 import SearchInput from "./SearchInput";
+import GrantsPage from './GrantsChat';
 
 let router = createBrowserRouter([
   {
@@ -33,7 +34,11 @@ let router = createBrowserRouter([
   {
     path: "/search",
     element: <Search />
-  }
+  },
+  {
+    path: '/grants',
+    element: <GrantsPage />,
+  },
 ]);
 
 export default function App() {
