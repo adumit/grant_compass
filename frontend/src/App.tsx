@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import { Search } from "./Search";
 import "./index.css";
+import "./App.css"
 import SearchInput from "./SearchInput";
 
 let router = createBrowserRouter([
