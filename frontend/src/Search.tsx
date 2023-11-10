@@ -54,7 +54,7 @@ export function Search() {
         <div style={{flexGrow: 1}}>
           <SearchInput query={query} handleClick={handleClick}/>
         </div>
-        <button onClick={handleTalkToGrantsClick}>
+        <button className="default-button" onClick={handleTalkToGrantsClick}>
           Talk to grants
         </button>
       </div>

@@ -12,6 +12,19 @@
   transition: box-shadow 0.3s ease; /* Smooth transition for shadow on hover */
 }
 
+.default-button {
+  border: 1px solid #000;
+  padding: 2px;
+  margin-bottom: 1px;
+  background-color: #b1bbf7;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 2px; /* Adds rounded corners to the cards */
+  transition: box-shadow 0.3s ease; /* Smooth transition for shadow on hover */
+}
+.default-button:hover {
+  background-color: #8193f8;
+}
+
 .opportunity-card.open {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* More prominent shadow for expanded card */
 }
@@ -32,6 +45,7 @@
   user-select: none; /* Prevents text selection */
   display: block; /* Makes the label fill the width of the container */
   margin-bottom: 0; /* Ensures no space between header and body */
+  width: 100%;
 }
 
 .opportunity-title span {
