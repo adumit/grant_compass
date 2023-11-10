@@ -14,7 +14,7 @@ export default function SearchInput({ query, handleClick}: SearchInputProps) {
   return (
     <div>
       <input style={{width:250}} id="searchInput" defaultValue={query} onKeyDown={keyDownHandler}/>
-      <button style={{marginLeft:1}} onClick={() => {handleClick()}}>
+      <button className="default-button" style={{marginLeft:1}} onClick={() => {handleClick()}}>
         Search  
       </button>
     </div>

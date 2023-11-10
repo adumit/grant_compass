@@ -17,6 +17,7 @@
     flex: 1; /* Take up the remaining half */
     display: flex;
     flex-direction: column; /* Stack input and messages vertically */
+    height:100%
   }
   
   .messages {
@@ -87,4 +88,18 @@
     .messages {
       height: 300px; /* Fixed height when in a column layout */
     }
+
+    
+.default-button {
+  border: 1px solid #000;
+  padding: 2px;
+  margin-bottom: 1px;
+  background-color: #b1bbf7;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 2px; /* Adds rounded corners to the cards */
+  transition: box-shadow 0.3s ease; /* Smooth transition for shadow on hover */
+}
+.default-button:hover {
+  background-color: #8193f8;
+}
   }

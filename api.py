@@ -1,7 +1,10 @@
+from typing import List
 import orjson
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from create_embedded_grants import chat_with_grant
 
 from pull_full_grants_data import get_full_grants_data
 from search_text import search_embeddings
@@ -47,3 +50,13 @@ async def get_item(search_text: str):
             for i in top_indices
         ]
     }
+
+class ChatRequest(BaseModel):
+    opportunity_id: int
+    messages: List[str]
+
+@app.post("/chat/")
+async def chat_with_grants(chatRequest: ChatRequest):
+    res = " " if len(chatRequest.messages) == 0 else chatRequest.messages[-1]
+    res = chat_with_grant(chatRequest.opportunity_id, chatRequest.messages)
+    return {"opportunity_id": chatRequest.opportunity_id, "content": res}
