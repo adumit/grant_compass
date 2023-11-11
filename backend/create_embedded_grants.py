@@ -49,13 +49,12 @@ def chat_with_grant(opportunity_id: int, chat_messages: List[ChatMessage]):
     return completion.choices[0].message.content
 
 
-def create_grant_test_data(n_grants: int = 50):
-    print("Reading in raw data...")
+def get_current_grants() -> List[dict]:
     grants_data = xmltodict.parse(open("./data/GrantsDBExtract20231102v2.xml").read())
-    print("Beginning to create embeddings...")
+
     today = date.today()
 
-    current_grants = sorted(
+    return sorted(
         [
             x
             for x in grants_data["Grants"]["OpportunitySynopsisDetail_1_0"]
@@ -67,6 +66,12 @@ def create_grant_test_data(n_grants: int = 50):
         reverse=True,
     )
 
+
+def create_grant_test_data(n_grants: int = 50):
+    print("Reading in raw data...")
+    current_grants = get_current_grants()
+
+    print("Beginning to create embeddings...")
     if n_grants == -1:
         n_grants = len(current_grants)
     fname = f"./data/test_grants_n={n_grants}.json"
