@@ -40,7 +40,7 @@ export default function GrantsPage() {
         },
         body: JSON.stringify({
           opportunity_id: top_opportunity.id,
-          messages: [...messages, newUserMessage].filter(m => m.type === "user").map(m => m.text),
+          messages: [...messages, newUserMessage],
         }),
       })
       .then(response => response.json())
