@@ -4,7 +4,7 @@ from openai import RateLimitError, OpenAI
 from openai.types import Embedding
 import numpy as np
 
-from parse_documents import KeyedChunkedText, FileName, ChunkKey
+from .parse_documents import KeyedChunkedText, FileName, ChunkKey
 
 
 TextEmbedding = list[float]
