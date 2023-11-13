@@ -19,7 +19,6 @@ def all_downloads_complete(driver):  # Driver is unused, but automatically passe
 
 
 def download_single_grant(opportunity_id: int):
-    print("STARTING SINGLE GRANT DOWNLOAD")
     driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
     driver.get(f"https://www.grants.gov/search-results-detail/{opportunity_id}")
 
@@ -50,7 +49,9 @@ def download_single_grant(opportunity_id: int):
 def pull_gov_grants_zip_files():
     current_grants = get_current_grants()
     current_opportunity_ids = [x["OpportunityID"] for x in current_grants]
-    for grant_opp in current_opportunity_ids[:10]:
+    for i, grant_opp in enumerate(current_opportunity_ids):
+        if i % 100 == 0:
+            print(f"Downloading grant {i+1} of {len(current_opportunity_ids)}")
         download_single_grant(grant_opp)
 
 
