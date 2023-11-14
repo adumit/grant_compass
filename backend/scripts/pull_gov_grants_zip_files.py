@@ -61,7 +61,7 @@ def download_single_grant(driver, opportunity_id: int) -> list[str]:
     return new_files
 
 
-def pull_gov_grants_zip_files() -> dict[int, list[str]]:
+def pull_gov_grants_zip_files(n_grants: int = -1) -> dict[int, list[str]]:
     chrome_options = Options()
     prefs = {"download.default_directory": DOWNLOAD_PATH}
     chrome_options.add_experimental_option("prefs", prefs)
@@ -73,6 +73,8 @@ def pull_gov_grants_zip_files() -> dict[int, list[str]]:
     grant_opportunity_to_fnames = {}
     current_grants = get_current_grants()
     current_opportunity_ids = [x["OpportunityID"] for x in current_grants]
+    if n_grants > 0:
+        current_opportunity_ids = current_opportunity_ids[:n_grants]
     for i, grant_opp in enumerate(current_opportunity_ids):
         if i % 100 == 0:
             print(f"Downloading grant {i+1} of {len(current_opportunity_ids)}")
@@ -89,11 +91,18 @@ if __name__ == "__main__":
     parser.add_argument(
         "--download_path", type=str, help="Path to check for complete downloads"
     )
+    parser.add_argument(
+        "--n_grants",
+        type=int,
+        default=-1,
+        help="Number of grants to download, -1 for all",
+    )
+
     args = parser.parse_args()
     DOWNLOAD_PATH = args.download_path
-    opportunity_id_to_files = pull_gov_grants_zip_files()
+    opportunity_id_to_files = pull_gov_grants_zip_files(args.n_grants)
     with open(
-        os.path.join(os.path.dirname(__file__), "grant_opportunity_to_fnames.json"),
+        os.path.join(os.path.dirname(__file__), "grant_opportunity_to_zip_names.json"),
         "w",
     ) as f:
-        json.dump(str(opportunity_id_to_files))
+        json.dump(opportunity_id_to_files, f)
