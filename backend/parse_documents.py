@@ -1,16 +1,10 @@
-from typing import List, Tuple, Dict, Union
+from typing import Union
 import os
 
 import docx
 import PyPDF2
 from bs4 import BeautifulSoup
-
-
-FileName = str
-Percentile = float
-ChunkIdx = int
-ChunkKey = Tuple[Percentile, ChunkIdx]
-KeyedChunkedText = Dict[ChunkKey, str]
+from backend.document_types import FileName, KeyedChunkedText
 
 
 def parse_docx(file_path: str) -> str:
@@ -19,12 +13,12 @@ def parse_docx(file_path: str) -> str:
     return "\n".join(full_text)
 
 
-def parse_pdf(file_path: str) -> List[Tuple[int, str]]:
+def parse_pdf(file_path: str) -> list[tuple[int, str]]:
     with open(file_path, "rb") as file:
-        reader = PyPDF2.PdfFileReader(file)
+        reader = PyPDF2.PdfReader(file)
         pages_text = []
-        for page in range(reader.numPages):
-            page_text = reader.getPage(page).extractText()
+        for page in range(len(reader.pages)):
+            page_text = reader.pages[page].extract_text()
             pages_text.append((page, page_text))
         return pages_text
 
@@ -45,7 +39,7 @@ def calculate_percentile(start_index: int, total_length: int) -> float:
 
 
 def chunk_text(
-    text: Union[str, List[Tuple[int, str]]], chunk_size: int, overlap: int, is_pdf: bool
+    text: Union[str, list[tuple[int, str]]], chunk_size: int, overlap: int, is_pdf: bool
 ) -> KeyedChunkedText:
     if is_pdf and isinstance(text, list):
         words = [word for page_number, page_text in text for word in page_text.split()]
@@ -70,7 +64,7 @@ def chunk_text(
     return chunks
 
 
-def process_file(
+def chunk_single_file(
     file_path: str, file_type: str, chunk_size: int, overlap: int
 ) -> KeyedChunkedText:
     if file_type == "docx":
@@ -91,13 +85,13 @@ def process_file(
     return chunk_text(text, chunk_size, overlap, is_pdf)
 
 
-def process_files(
-    file_paths: List[str], chunk_size: int, overlap: int
-) -> Dict[FileName, KeyedChunkedText]:
+def chunk_files(
+    file_paths: list[str], chunk_size: int, overlap: int
+) -> dict[FileName, KeyedChunkedText]:
     chunks = {}
     for file_path in file_paths:
         file_type = file_path.split(".")[-1]
-        chunks[os.path.basename(file_path)] = process_file(
+        chunks[os.path.basename(file_path)] = chunk_single_file(
             file_path, file_type, chunk_size, overlap
         )
     return chunks
