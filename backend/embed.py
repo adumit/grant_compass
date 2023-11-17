@@ -4,10 +4,11 @@ from openai import RateLimitError, OpenAI
 from openai.types import Embedding
 import numpy as np
 
-from .parse_documents import KeyedChunkedText, FileName, ChunkKey
-
-
-TextEmbedding = list[float]
+from .document_types import (
+    KeyedChunkedText,
+    FileName,
+    KeyedChunkedTextWithEmbeddings,
+)
 
 
 def get_embedding(texts: list[str], model="text-embedding-ada-002") -> list[np.array]:
@@ -33,14 +34,14 @@ def get_embedding(texts: list[str], model="text-embedding-ada-002") -> list[np.a
 
 
 def embed_chunks(
-    chunks: dict[FileName, KeyedChunkedText]
-) -> dict[tuple[FileName, ChunkKey], TextEmbedding]:
+    filename_to_chunks: dict[FileName, KeyedChunkedText]
+) -> KeyedChunkedTextWithEmbeddings:
     embeddings = {}
     batch_size = 200
-    num_chunks = sum([len(file_chunks) for file_chunks in chunks.values()])
+    num_chunks = sum([len(file_chunks) for file_chunks in filename_to_chunks.values()])
     keyed_chunk_tuples = [
         (file_name, chunk_key, chunk)
-        for file_name, file_chunks in chunks.items()
+        for file_name, file_chunks in filename_to_chunks.items()
         for chunk_key, chunk in file_chunks.items()
     ]
     for i in range(0, num_chunks, batch_size):

@@ -1,4 +1,5 @@
 import argparse
+from functools import partial
 import os
 import json
 
@@ -23,15 +24,16 @@ This should be run from the root of the project to download locally.
 Note: the method for checking for complete downloads likely does not work on windows
 
 """
-DOWNLOAD_PATH = ""  # This should be changed via running this as main.
 
 
-def all_downloads_complete(driver):  # Driver is unused, but automatically passed in
-    downloads = os.listdir(DOWNLOAD_PATH)
+def all_downloads_complete(
+    driver, download_path
+):  # Driver is unused, but automatically passed in
+    downloads = os.listdir(download_path)
     return not any([x.endswith(".crdownload") for x in downloads])
 
 
-def download_single_grant(driver, opportunity_id: int) -> list[str]:
+def download_single_grant(driver, opportunity_id: int, download_path: str) -> list[str]:
     driver.get(f"https://www.grants.gov/search-results-detail/{opportunity_id}")
 
     button_text = "Related Documents"
@@ -47,23 +49,28 @@ def download_single_grant(driver, opportunity_id: int) -> list[str]:
 
     # Filter for .zip file links
     zip_links = [l for l in links if ".zip" in l.text]
-    files_before = os.listdir(DOWNLOAD_PATH)
+    files_before = os.listdir(download_path)
 
     for l in zip_links:
         l.click()
         # Don't click the next link instantly or we might lose earlier ones
         time.sleep(2)
 
+    download_complete_with_path = partial(
+        all_downloads_complete, download_path=download_path
+    )
     # waits for all the files to be completed and returns the paths
-    WebDriverWait(driver, 120, 1).until(all_downloads_complete)
-    files_after = os.listdir(DOWNLOAD_PATH)
+    WebDriverWait(driver, 120, 1).until(download_complete_with_path)
+    files_after = os.listdir(download_path)
     new_files = [f for f in files_after if f not in files_before]
     return new_files
 
 
-def pull_gov_grants_zip_files(n_grants: int = -1) -> dict[int, list[str]]:
+def pull_gov_grants_zip_files(
+    download_path: str, n_grants: int = -1
+) -> dict[int, list[str]]:
     chrome_options = Options()
-    prefs = {"download.default_directory": DOWNLOAD_PATH}
+    prefs = {"download.default_directory": download_path}
     chrome_options.add_experimental_option("prefs", prefs)
 
     driver = webdriver.Chrome(
@@ -78,7 +85,7 @@ def pull_gov_grants_zip_files(n_grants: int = -1) -> dict[int, list[str]]:
     for i, grant_opp in enumerate(current_opportunity_ids):
         if i % 100 == 0:
             print(f"Downloading grant {i+1} of {len(current_opportunity_ids)}")
-        downloaded_files = download_single_grant(driver, grant_opp)
+        downloaded_files = download_single_grant(driver, grant_opp, download_path)
         grant_opportunity_to_fnames[grant_opp] = downloaded_files
     driver.quit()
     return grant_opportunity_to_fnames
@@ -99,8 +106,9 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    DOWNLOAD_PATH = args.download_path
-    opportunity_id_to_files = pull_gov_grants_zip_files(args.n_grants)
+    opportunity_id_to_files = pull_gov_grants_zip_files(
+        args.download_path, args.n_grants
+    )
     with open(
         os.path.join(os.path.dirname(__file__), "grant_opportunity_to_zip_names.json"),
         "w",
