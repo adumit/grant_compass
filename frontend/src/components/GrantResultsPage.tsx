@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Opportunity, SearchResponse } from "./types/apiTypes";
-import OpportunityCard from "./OpportunityCard";
+import { Opportunity, SearchResponse } from "../types/apiTypes";
+import OpportunityCard from "../OpportunityCard";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import SearchInput from "./components/SearchInput";
+import SearchInput from "./SearchInput";
 
 
-export default function Search() {
+export default function GrantResults() {
   const [search, setSearch] = useSearchParams();
   const [query, setQuery] = useState<string>(search.get("q") ?? "");
   const [data, setData] = useState<SearchResponse>({"Top matches":[]});

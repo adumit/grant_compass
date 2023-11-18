@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider, useNavigate, createSearchParams } 
 import './index.css';
 import './App.css';
 import SearchInput from "./components/SearchInput";
-import Search from "./Search";
+import GrantResults from "./components/GrantResultsPage";
 import GrantsPage from './GrantsChat';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/search",
-    element: <Search />,
+    element: <GrantResults />,
   },
   {
     path: '/grants',
