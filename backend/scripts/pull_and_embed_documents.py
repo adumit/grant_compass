@@ -61,28 +61,22 @@ if __name__ == "__main__":
             files, chunk_size=args.chunk_size, overlap=args.overlap
         )
         opportunity_id_to_fname_with_chunked_text[opportunity_id] = fname_to_chunks
-    print(opportunity_id_to_fname_with_chunked_text)
-    print(type(opportunity_id_to_fname_with_chunked_text))
 
     print("Embedding chunks")
-    # Then for each chunk, embed with the appropriate mapping
-    opportunity_id_to_chunked_text_with_embeddings: dict[
-        str, KeyedChunkedTextWithEmbeddings
-    ] = {}
+    # Then for each chunk, embed with the appropriate mapping and save them to disk for now
+    # TODO: Maybe upload them directly to AWS bucket or write them to a DB?
     for (
         opportunity_id,
         file_name_to_chunks,
     ) in opportunity_id_to_fname_with_chunked_text.items():
         keyed_chunked_text_with_embeddings: KeyedChunkedTextWithEmbeddings = {}
         embedded_chunks = embed_chunks(file_name_to_chunks)
-        opportunity_id_to_chunked_text_with_embeddings[
-            opportunity_id
-        ] = keyed_chunked_text_with_embeddings
-    with open(
-        os.path.join(
-            os.path.dirname(__file__),
-            "grant_opportunity_to_chunked_text_with_embeddings.json",
-        ),
-        "w",
-    ) as f:
-        json.dump(opportunity_id_to_chunked_text_with_embeddings, f)
+        with open(
+            os.path.join(
+                os.path.dirname(__file__),
+                "embedded_document_results",
+                f"{opportunity_id}-embedded-related-document-chunks.json",
+            ),
+            "w",
+        ) as f:
+            json.dump(keyed_chunked_text_with_embeddings, f)
