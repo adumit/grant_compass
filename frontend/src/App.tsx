@@ -1,5 +1,5 @@
 import React from 'react';
-import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, useNavigate, createSearchParams } from "react-router-dom";
 import './index.css';
 import './App.css';
 import SearchInput from "./components/SearchInput";
@@ -31,7 +31,7 @@ function HomePage() {
 
   function goToSearch() {
     const inputField = document.getElementById("searchInput") as HTMLInputElement;
-    navigate({ pathname: "/search", search: `?q=${inputField?.value}` });
+    navigate({ pathname: "/search", search:`?${createSearchParams({q: inputField?.value})}`});
   }
 
   function handleFileUpload() {}
@@ -40,7 +40,7 @@ function HomePage() {
     <Container>
       <Box textAlign="center" my={5}>
         <Typography variant="h3" component="h1" gutterBottom>
-          Welcome to Grant Compass!
+          Welcome to Grant Compass
         </Typography>
         <SearchInput handleClick={goToSearch} handleFileUpload={handleFileUpload} />
       </Box>

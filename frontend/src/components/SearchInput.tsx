@@ -64,6 +64,7 @@ export default function SearchInput({ query, handleClick, handleFileUpload }: Se
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={keyDownHandler}
+            id="searchInput"
           />
           <Button
             variant="contained"
