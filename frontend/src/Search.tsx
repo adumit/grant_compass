@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Opportunity, SearchResponse } from "./types/apiTypes";
 import OpportunityCard from "./OpportunityCard";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import SearchInput from "./SearchInput";
+import SearchInput from "./components/SearchInput";
 
 
-export function Search() {
+export default function Search() {
   const [search, setSearch] = useSearchParams();
   const [query, setQuery] = useState<string>(search.get("q") ?? "");
   const [data, setData] = useState<SearchResponse>({"Top matches":[]});
@@ -52,7 +52,7 @@ export function Search() {
     <div style={{display:"flex", flexDirection:"column"}}>
       <div style={{display:"flex", justifyContent: "space-between", position:"sticky", top:0, backgroundColor:"white", padding: "10px"}}>
         <div style={{flexGrow: 1}}>
-          <SearchInput query={query} handleClick={handleClick}/>
+          <SearchInput query={query} handleClick={handleClick} handleFileUpload={() => {}}/>
         </div>
         <button className="default-button" onClick={handleTalkToGrantsClick}>
           Talk to grants

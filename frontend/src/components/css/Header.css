@@ -1,0 +1,33 @@
+.header {
+    background-color: #4a90e2; /* Example blue background */
+    color: white;
+    padding: 10px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header-title {
+    font-weight: bold;
+    font-size: 1.5em;
+    margin: 0;
+  }
+  
+  .header-nav {
+    display: flex;
+    gap: 20px; /* Adds space between the links */
+  }
+  
+  .header-nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 1em;
+    padding: 5px 10px;
+    transition: color 0.3s ease;
+  }
+  
+  .header-nav a:hover {
+    color: #ade1ff; /* Lighter blue on hover */
+  }
+  
