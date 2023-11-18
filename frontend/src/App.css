@@ -57,3 +57,92 @@
   color: #333;
   font-size: 14px;
 }
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.home-title {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 2em;
+  color: #333;
+}
+
+.search-container {
+  width: 100%;
+  max-width: 500px; /* Adjust as needed */
+}
+
+/* Add styles for Header and Footer components */
+.header {
+  background-color: #f8f8f8;
+  padding: 10px 0;
+  text-align: center;
+  /* Additional styling */
+}
+
+.footer {
+  background-color: #f8f8f8;
+  padding: 10px 0;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  /* Additional styling */
+}
+
+.search-bar {
+  font-size: 1.2em; /* Larger font size */
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box; /* Include padding in width */
+}
+
+.search-button {
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth background transition */
+}
+
+.search-button:hover {
+  background-color: #5a9bd4; /* Slightly darker on hover */
+}
+
+/* File Upload Button - initially hidden */
+.file-upload-button {
+  display: none; /* Show only when expanded */
+  margin-top: 10px;
+}
+
+/* Tooltip */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* Tooltip styling */
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+  /* Tooltip arrow */
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
