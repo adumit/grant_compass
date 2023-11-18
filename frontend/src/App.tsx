@@ -7,6 +7,8 @@ import Search from "./Search";
 import GrantsPage from './GrantsChat';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { Container, Typography, Box } from '@mui/material';
+
 
 // Define the router outside the App component
 const router = createBrowserRouter([
@@ -35,12 +37,14 @@ function HomePage() {
   function handleFileUpload() {}
 
   return (
-    <div className="home-container">
-      <h1 className="home-title">{"Welcome to Grant Compass!"}</h1>
-      <div className="search-container">
+    <Container>
+      <Box textAlign="center" my={5}>
+        <Typography variant="h3" component="h1" gutterBottom>
+          Welcome to Grant Compass!
+        </Typography>
         <SearchInput handleClick={goToSearch} handleFileUpload={handleFileUpload} />
-      </div>
-    </div>
+      </Box>
+    </Container>
   );
 }
 
@@ -48,6 +52,7 @@ export default function App() {
   return (
     <>
       <Header />
+      <meta name="viewport" content="initial-scale=1, width=device-width" />
       <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />
       <Footer />
     </>
