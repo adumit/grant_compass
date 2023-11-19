@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import './css/grantsPage.css';
+import { Grid, TextField, Button, List, ListItem, ListItemText, Paper, Box, Typography, Divider } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
 import { Opportunity } from '../types/apiTypes';
 
 
@@ -28,7 +29,8 @@ export default function GrantsPage() {
     setChatInput('');
 
     const opportunities = document.getElementsByClassName("grant-opportunity")
-    const top_opportunity = opportunities.item(0)
+    // TODO: Handle multiple opportunities
+    const top_opportunity = selectedOpportunities[0]
 
     const rootUrl = process.env.REACT_APP_BACKEND_URL ?? "http://localhost:8000";
     if (top_opportunity !== null)
@@ -39,46 +41,90 @@ export default function GrantsPage() {
           'content-type': 'application/json;charset=UTF-8',
         },
         body: JSON.stringify({
-          opportunity_id: top_opportunity.id,
+          opportunity_id: top_opportunity.OpportunityID,
           messages: [...messages, newUserMessage],
         }),
       })
-      .then(response => response.json())
+      .then(response => {
+        return response.json()
+      })
       .then(response => setMessages(prevMessages => [...prevMessages, {type: 'bot', text: response.content}]));
   };
 
+  // Custom styling for the message bubbles
+  const messageBubble = (type: 'user' | 'bot') => ({
+    maxWidth: '70%',
+    padding: '10px',
+    borderRadius: '15px',
+    margin: '5px 0',
+    color: 'white',
+    display: 'inline-block',
+    wordWrap: 'break-word' as 'break-word', // Type assertion for 'wordWrap' property
+    bgcolor: type === 'user' ? 'primary.main' : 'grey.500',
+    alignSelf: type === 'user' ? 'end' : 'start',
+    textAlign: type === 'user' ? 'right' as 'right' : 'left' as 'left' // Type assertion for 'textAlign' property
+  });
+
+  // TODO: This should be global somewhere
+  const footerHeight: string = '100px'; // Adjust the value according to your footer's height
+
   return (
-    <div className="grants-page" style={{ display: 'flex', padding: '20px' }}>
-      <div id="selected-grants" className="selected-grants" style={{ flex: 1, marginRight: '20px' }}>
-        {/* Map through the selected opportunities and display them */}
-        <ul>
-          {selectedOpportunities.map(opportunity => (
-            <li className="grant-opportunity" id={opportunity.OpportunityID} key={opportunity.OpportunityID}>{opportunity.OpportunityTitle}</li>
-          ))}
-        </ul>
-      </div>
-      <div className="chat-interface" style={{ flex: 1 }}>
-        {/* Chat messages */}
-        <div className="messages" style={{ height: '300px', overflowY: 'auto' }}>
-          {messages.map((message, index) => (
-            <div key={index} className={`message ${message.type}`}>
-              {message.text}
-            </div>
-          ))}
-        </div>
-        {/* Chat input */}
-        <div className="chat-input" style={{ marginTop: '20px' }}>
-          <input
-            type="text"
-            value={chatInput}
-            onChange={e => setChatInput(e.target.value)}
-            onKeyDown={e => {if (e.key === "Enter") handleSendMessage()}}
-            placeholder="Type here"
-            style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
-          />
-          <button className="default-button" onClick={handleSendMessage}>Send</button>
-        </div>
-      </div>
-    </div>
+    <Box sx={{ pb: footerHeight, width: '100%' }}>
+      <Grid container spacing={2} sx={{ p: 2 }}>
+        <Grid item xs={12} md={6}>
+          <Paper elevation={3} sx={{ p: 2, maxHeight: 'calc(100vh - 100px)', overflow: 'auto' }}>
+            <Typography variant="h6" gutterBottom>
+              Selected Grants
+            </Typography>
+            <Divider />
+            <List>
+              {selectedOpportunities.map(opportunity => (
+                <ListItem key={opportunity.OpportunityID}>
+                  <ListItemText primary={opportunity.OpportunityTitle} />
+                </ListItem>
+              ))}
+            </List>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Paper elevation={3} sx={{ p: 2, height: 'calc(100vh - 200px)', display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="h6" gutterBottom>
+              Chat with Grants
+            </Typography>
+            <Divider />
+            <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+              <List sx={{ padding: 0 }}>
+                {messages.map((message, index) => (
+                  <ListItem key={index} sx={{ display: 'flex', flexDirection: 'column', alignItems: message.type === 'user' ? 'flex-end' : 'flex-start' }}>
+                    <Box sx={messageBubble(message.type)}>
+                      {message.text}
+                    </Box>
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+            <Box sx={{ mt: 2 }}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                value={chatInput}
+                onChange={e => setChatInput(e.target.value)}
+                onKeyDown={e => { if (e.key === "Enter") handleSendMessage(); }}
+                placeholder="Type your message here"
+                sx={{ mb: 1 }}
+              />
+              <Button
+                variant="contained"
+                endIcon={<SendIcon />}
+                onClick={handleSendMessage}
+                sx={{ width: '100%' }}
+              >
+                Send
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
