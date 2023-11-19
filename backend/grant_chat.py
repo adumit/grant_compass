@@ -109,7 +109,7 @@ def chat_with_grant(opportunity_id: int, chat_messages: list[ChatMessage]):
         messages.append(
             {
                 "role": "system",
-                "content": f"Here is a related document: {join_char.join([chunk['chunk'] for chunk in top_3])}",
+                "content": f"Here are the most important pieces of the related document: {join_char.join([chunk['chunk'] for chunk in top_3])}",
             }
         )
 
