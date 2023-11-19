@@ -4,4 +4,6 @@ ChunkIdx = int
 ChunkKey = tuple[Percentile, ChunkIdx]
 KeyedChunkedText = dict[ChunkKey, str]
 TextEmbedding = list[float]
-KeyedChunkedTextWithEmbeddings = dict[tuple[FileName, ChunkKey], TextEmbedding]
+KeyedChunkedTextWithEmbeddings = dict[
+    tuple[FileName, ChunkKey], tuple[TextEmbedding, str]
+]
