@@ -48,6 +48,6 @@ def embed_chunks(
         print(f"Embedding {i} to {i+batch_size}...")
         batch = keyed_chunk_tuples[i : i + batch_size]
         batch_embeddings = get_embedding([chunk for _, _, chunk in batch])
-        for j, (file_name, chunk_key, _) in enumerate(batch):
-            embeddings[(file_name, chunk_key)] = batch_embeddings[j]
+        for j, (file_name, chunk_key, chunk) in enumerate(batch):
+            embeddings[(file_name, chunk_key)] = (list(batch_embeddings[j]), chunk)
     return embeddings

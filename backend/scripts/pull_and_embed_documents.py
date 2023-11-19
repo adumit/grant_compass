@@ -69,8 +69,16 @@ if __name__ == "__main__":
         opportunity_id,
         file_name_to_chunks,
     ) in opportunity_id_to_fname_with_chunked_text.items():
-        keyed_chunked_text_with_embeddings: KeyedChunkedTextWithEmbeddings = {}
         embedded_chunks = embed_chunks(file_name_to_chunks)
+        jsonifiable_data_stucture = {}
+        for (file_name, chunk_key), (chunk_embedding, chunk) in embedded_chunks.items():
+            jsonifiable_data_stucture[f"{file_name}-{chunk_key[0]}-{chunk_key[1]}"] = {
+                "embedding": chunk_embedding,
+                "opportunity_id": opportunity_id,
+                "file_name": file_name,
+                "chunk_key": chunk_key,
+                "chunk": chunk,
+            }
         with open(
             os.path.join(
                 os.path.dirname(__file__),
@@ -79,4 +87,4 @@ if __name__ == "__main__":
             ),
             "w",
         ) as f:
-            json.dump(keyed_chunked_text_with_embeddings, f)
+            json.dump(jsonifiable_data_stucture, f)
