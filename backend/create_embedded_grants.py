@@ -3,50 +3,13 @@ from datetime import date
 import argparse
 from typing import List
 
-from openai import OpenAI
 import xmltodict
 import orjson
-from backend.request_types import ChatMessage
 from backend.embed import get_embedding
 
 
 def convert_date(date_str: str):
     return f"{date_str[-4:]}-{date_str[:2]}-{date_str[2:4]}"
-
-
-def chat_with_grant(opportunity_id: int, chat_messages: List[ChatMessage]):
-    try:
-        file_text = " ".join(
-            open(str(opportunity_id) + ".txt", encoding="utf8").readlines()
-        ).replace("\n", " ")
-    except FileNotFoundError:
-        return "Here's the information about the grant..."
-
-    messages = [
-        {
-            "role": "system",
-            "content": "You are a helpful, pattern-following assistant that translates academic jargon into plain English.",
-        }
-    ]
-    messages.append(
-        {
-            "role": "system",
-            "content": "Here is the text of a grant proposal: " + file_text,
-        }
-    )
-    for message in chat_messages:
-        messages.append(
-            {
-                "role": "assistant" if message.type == "bot" else "user",
-                "content": message.text,
-            }
-        )
-
-    client = OpenAI()
-    completion = client.chat.completions.create(
-        messages=messages, model="gpt-3.5-turbo"
-    )
-    return completion.choices[0].message.content
 
 
 def get_current_grants() -> List[dict]:
