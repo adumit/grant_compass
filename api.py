@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.request_types import ChatRequest
-from backend.create_embedded_grants import chat_with_grant
+from backend.grant_chat import chat_with_grant
 
 from backend.pull_full_grants_data import get_full_grants_data
 from backend.search_text import search_embeddings

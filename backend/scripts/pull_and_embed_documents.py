@@ -6,7 +6,7 @@ from backend.parse_documents import chunk_files
 from backend.document_types import (
     KeyedChunkedText,
     FileName,
-    KeyedChunkedTextWithEmbeddings,
+    EmbeddedRelatedDocumentChunks,
 )
 from backend.embed import embed_chunks
 
@@ -70,7 +70,7 @@ if __name__ == "__main__":
         file_name_to_chunks,
     ) in opportunity_id_to_fname_with_chunked_text.items():
         embedded_chunks = embed_chunks(file_name_to_chunks)
-        jsonifiable_data_stucture = {}
+        jsonifiable_data_stucture: dict[str, EmbeddedRelatedDocumentChunks] = {}
         for (file_name, chunk_key), (chunk_embedding, chunk) in embedded_chunks.items():
             jsonifiable_data_stucture[f"{file_name}-{chunk_key[0]}-{chunk_key[1]}"] = {
                 "embedding": chunk_embedding,
