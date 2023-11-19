@@ -4,7 +4,7 @@ import './index.css';
 import './App.css';
 import SearchInput from "./components/SearchInput";
 import GrantResults from "./components/GrantResultsPage";
-import GrantsPage from './GrantsChat';
+import GrantsPage from './components/GrantsChat';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { Container, Typography, Box } from '@mui/material';
