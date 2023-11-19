@@ -1,6 +1,6 @@
 import React, { useEffect, useState, ChangeEvent, KeyboardEvent } from 'react';
 import { Grid, TextField, Button, Box } from '@mui/material';
-import OpportunityCard from "../OpportunityCard";
+import OpportunityCard from "./OpportunityCard";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Opportunity, SearchResponse } from "../types/apiTypes";
 

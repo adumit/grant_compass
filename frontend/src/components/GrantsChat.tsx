@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import './grantsPage.css';
-import { Opportunity } from './types/apiTypes';
+import './css/grantsPage.css';
+import { Opportunity } from '../types/apiTypes';
 
 
 interface Message {

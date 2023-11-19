@@ -1,4 +1,4 @@
-import { Opportunity } from "./types/apiTypes";
+import { Opportunity } from "../types/apiTypes";
 import React, { useState } from 'react';
 import { Card, Checkbox, Typography, Accordion, AccordionSummary, AccordionDetails, CardHeader } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
