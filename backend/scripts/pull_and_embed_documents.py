@@ -69,6 +69,7 @@ if __name__ == "__main__":
         opportunity_id,
         file_name_to_chunks,
     ) in opportunity_id_to_fname_with_chunked_text.items():
+        print(f"Embedding: {opportunity_id}")
         embedded_chunks = embed_chunks(file_name_to_chunks)
         jsonifiable_data_stucture: dict[str, EmbeddedRelatedDocumentChunks] = {}
         for (file_name, chunk_key), (chunk_embedding, chunk) in embedded_chunks.items():
