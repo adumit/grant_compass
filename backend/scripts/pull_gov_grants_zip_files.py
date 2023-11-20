@@ -79,13 +79,30 @@ def pull_gov_grants_zip_files(
 
     grant_opportunity_to_fnames = {}
     current_grants = get_current_grants()
-    current_opportunity_ids = [x["OpportunityID"] for x in current_grants]
+    # TODO: A little annoying that this is hard coded, b/c it maps to the same place as the
+    # pull_and_embed_documents.py script
+    existing_opportunity_ids = {
+        str(fname.split("-")[0])
+        for fname in os.listdir(
+            os.path.join(os.path.dirname(__file__), "embedded_document_results")
+        )
+        if "embedded-related-document-chunks" in fname
+    }
+    current_opportunity_ids = [
+        x["OpportunityID"]
+        for x in current_grants
+        if x["OpportunityID"] not in existing_opportunity_ids
+    ]
     if n_grants > 0:
         current_opportunity_ids = current_opportunity_ids[:n_grants]
     for i, grant_opp in enumerate(current_opportunity_ids):
         if i % 100 == 0:
             print(f"Downloading grant {i+1} of {len(current_opportunity_ids)}")
-        downloaded_files = download_single_grant(driver, grant_opp, download_path)
+        try:
+            downloaded_files = download_single_grant(driver, grant_opp, download_path)
+        except Exception as e:
+            print(f"Error downloading grant {grant_opp}: {e}")
+            continue
         grant_opportunity_to_fnames[grant_opp] = downloaded_files
     driver.quit()
     return grant_opportunity_to_fnames
