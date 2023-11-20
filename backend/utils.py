@@ -1,7 +1,7 @@
 import os
 
 import boto3
-from botocore.exceptions import NoCredentialsError
+from botocore.exceptions import NoCredentialsError, DataNotFoundError, ClientError
 
 
 def download_file_from_s3(
@@ -20,3 +20,5 @@ def download_file_from_s3(
         )
     except NoCredentialsError:
         print("Credentials not available")
+    except ClientError:
+        print(f"File {s3_object_key} not found in bucket {bucket_name}")

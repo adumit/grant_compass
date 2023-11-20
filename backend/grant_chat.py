@@ -32,7 +32,7 @@ def pull_related_document_chunks_from_opportunity_id(
 
 def create_special_message_chain_for_full_document(
     opportunity_id: int, chat_messages: list[ChatMessage]
-) -> list[ChatMessage]:
+) -> tuple[list[ChatMessage], bool]:
     messages = [
         {
             "role": "system",
@@ -51,7 +51,7 @@ def create_special_message_chain_for_full_document(
             }
         )
     except FileNotFoundError:
-        return "Sorry, we don't support chatting with this grant yet..."
+        return "Sorry, we don't support chatting with this grant yet...", False
 
     for message in chat_messages:
         messages.append(
@@ -60,7 +60,7 @@ def create_special_message_chain_for_full_document(
                 "content": message.text,
             }
         )
-    return messages
+    return messages, True
 
 
 def select_best_related_document_chunks(
@@ -85,9 +85,12 @@ def chat_with_grant(opportunity_id: int, chat_messages: list[ChatMessage]):
     embedded_chunks = pull_related_document_chunks_from_opportunity_id(opportunity_id)
 
     if not embedded_chunks:
-        messages = create_special_message_chain_for_full_document(
+        # TODO: Just remove this path
+        messages, success = create_special_message_chain_for_full_document(
             opportunity_id, chat_messages
         )
+        if not success:
+            return messages
     else:
         # Previous conversation...
         messages = [
