@@ -1,0 +1,9 @@
+{
+  "name": "grant_compass",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Empty package.json needed for Heroku build",
+  "scripts": {
+    "postinstall": "if [ $CLIENT_ENV ]; then cd frontend && npm install; fi"
+  }
+}
