@@ -1,24 +1,31 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { Grid, TextField, Button, List, ListItem, ListItemText, Paper, Box, Typography, Divider } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { Opportunity } from '../types/apiTypes';
-
 
 interface Message {
   type: 'user' | 'bot';
   text: string;
 }
 
-type GrantsPageState = {
-  selectedOpportunities: Opportunity[];
-};
-
 export default function GrantsPage() {
   const location = useLocation();
-  const { selectedOpportunities } = location.state as GrantsPageState || { selectedOpportunities: [] };
+  const [searchParams] = useSearchParams();
+  const [selectedOpportunities, setSelectedOpportunities] = useState<Opportunity[]>(location.state?.selectedOpportunities ?? []);
   const [chatInput, setChatInput] = useState('');
   const [messages, setMessages] = useState<Array<Message>>([]);
+
+  useEffect(() => {
+    if (selectedOpportunities.length === 0) {
+      const rootUrl: string = process.env.REACT_APP_BACKEND_URL ?? "http://localhost:8000";
+      const ids: string[] = searchParams.getAll("id")
+      fetch(`${rootUrl}/opportunities/?id=${ids.join("&id=")}`)
+        .then(response => response.json())
+        .then(result => result["items"] ?? [])
+        .then(setSelectedOpportunities);
+    }
+  }, [])
 
   const handleSendMessage = () => {
     if (!chatInput.trim()) return;
@@ -28,7 +35,6 @@ export default function GrantsPage() {
 
     setChatInput('');
 
-    const opportunities = document.getElementsByClassName("grant-opportunity")
     // TODO: Handle multiple opportunities
     const top_opportunity = selectedOpportunities[0]
 
