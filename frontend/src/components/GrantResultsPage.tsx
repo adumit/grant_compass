@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ChangeEvent, KeyboardEvent } from 'react';
+import { useEffect, useState, ChangeEvent, KeyboardEvent } from 'react';
 import { Grid, TextField, Button, Box } from '@mui/material';
 import OpportunityCard from "./OpportunityCard";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -22,7 +22,9 @@ export default function GrantResults() {
   };
 
   const handleTalkToGrantsClick = () => {
-    navigate('/grants', { state: { selectedOpportunities } });
+    const params: URLSearchParams = new URLSearchParams();
+    selectedOpportunities.map(opp => params.append("id", opp.OpportunityID))
+    navigate({ pathname: '/grants', search: `?${params.toString()}` }, { state: { selectedOpportunities } });
   };
 
   const handleKeyPress = (e: KeyboardEvent<HTMLDivElement>) => {

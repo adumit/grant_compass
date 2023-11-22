@@ -1,8 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
+from typing import List
+
 from backend.request_types import ChatRequest
 from backend.grant_chat import chat_with_grant
-
 from backend.pull_full_grants_data import get_full_grants_data
 from backend.search_text import search_embeddings
 
@@ -32,9 +33,19 @@ async def startup_event():
 async def root():
     return {"message": "Hello World"}
 
+@app.get("/opportunities/")
+async def get_items(id: List[str] = Query(None)):
+    grant_embeddings = get_full_grants_data()
+
+    return {
+        "items": [
+            {k: v for k, v in embedding.items() if k != "embedding"}
+            for embedding in grant_embeddings if embedding["OpportunityID"] in id
+        ]
+    }
 
 @app.get("/search/")
-async def get_item(search_text: str):
+async def search_items(search_text: str):
     grant_embeddings = get_full_grants_data()
 
     top_indices = search_embeddings(
