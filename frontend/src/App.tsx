@@ -1,5 +1,10 @@
-import React from 'react';
-import { createBrowserRouter, RouterProvider, useNavigate, createSearchParams } from "react-router-dom";
+import {
+  createBrowserRouter,
+  createSearchParams,
+  Outlet,
+  RouterProvider,
+  useNavigate
+} from "react-router-dom";
 import './index.css';
 import './App.css';
 import SearchInput from "./components/SearchInput";
@@ -13,18 +18,33 @@ import { Container, Typography, Box } from '@mui/material';
 // Define the router outside the App component
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <HomePage />,
-  },
-  {
-    path: "/search",
-    element: <GrantResults />,
-  },
-  {
-    path: '/grants',
-    element: <GrantsPage />,
-  },
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/search",
+        element: <GrantResults />,
+      },
+      {
+        path: '/grants',
+        element: <GrantsPage />,
+      },
+    ]
+  }
 ]);
+
+function Layout() {
+  return (
+    <>
+      <Header />
+      <Outlet />
+      <Footer />
+    </>
+  );
+}
 
 function HomePage() {
   const navigate = useNavigate();
@@ -51,10 +71,8 @@ function HomePage() {
 export default function App() {
   return (
     <>
-      <Header />
       <meta name="viewport" content="initial-scale=1, width=device-width" />
       <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />
-      <Footer />
     </>
   );
 }
