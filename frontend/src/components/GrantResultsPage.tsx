@@ -27,29 +27,33 @@ export default function GrantResults() {
     navigate({ pathname: '/grants', search: `?${params.toString()}` }, { state: { selectedOpportunities } });
   };
 
-  const handleKeyPress = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'Enter' && query) {
-      setSearchParams({ q: query });
-      fetchData(query);
-    }
-  };
-
+  // Update the search bar string as characters are typed
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
 
+  // Update the page query params, triggering data reload, when a user hits the enter key
+  const handleKeyPress = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' && query) {
+      setSearchParams({ q: query });
+    }
+  };
+
+  // Ensure the query and data match the search param any time the params are updated
+  // This covers page load, on-page searches, and back navigation
+  useEffect(() => {
+    const queryValue: string = searchParams.get("q") ?? "";
+    setQuery(queryValue);
+    fetchData(queryValue);
+  }, [searchParams]);
+
+  // Pull data from the backend and set the page results
   const fetchData = (queryValue: string) => {
     const rootUrl: string = process.env.REACT_APP_BACKEND_URL ?? "http://localhost:8000";
     fetch(`${rootUrl}/search/?search_text=${queryValue}`)
       .then(response => response.json())
       .then(setData);
   };
-
-  useEffect(() => {
-    if (query) {
-      fetchData(query);
-    }
-  }, []); // You may want to execute this only once when the component mounts or when certain conditions are met
 
   const footerHeight: string = '100px'; // Adjust the value according to your footer's height
 
@@ -61,13 +65,8 @@ export default function GrantResults() {
           label="Search Grants"
           variant="outlined"
           value={query}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
-          onKeyPress={(e: KeyboardEvent<HTMLDivElement>) => {
-            if (e.key === 'Enter') {
-              setSearchParams({ q: query });
-              fetchData(query);
-            }
-          }}
+          onChange={handleChange}
+          onKeyDown={handleKeyPress}
           sx={{ flexGrow: 1, maxWidth: '1000px', mr: 2 }} // Adjust the maxWidth as needed for your design
         />
         <Button variant="contained" onClick={handleTalkToGrantsClick} sx={{ whiteSpace: 'nowrap' }}>
