@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { Grid, TextField, Button, List, ListItem, ListItemText, Paper, Box, Typography, Divider } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
@@ -15,6 +15,11 @@ export default function GrantsPage() {
   const [selectedOpportunities, setSelectedOpportunities] = useState<Opportunity[]>(location.state?.selectedOpportunities ?? []);
   const [chatInput, setChatInput] = useState('');
   const [messages, setMessages] = useState<Array<Message>>([]);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   useEffect(() => {
     if (selectedOpportunities.length === 0) {
@@ -25,7 +30,7 @@ export default function GrantsPage() {
         .then(result => result["items"] ?? [])
         .then(setSelectedOpportunities);
     }
-  }, [])
+  }, [searchParams, selectedOpportunities])
 
   const handleSendMessage = () => {
     if (!chatInput.trim()) return;
@@ -105,6 +110,7 @@ export default function GrantsPage() {
                     <Box sx={messageBubble(message.type)}>
                       {message.text}
                     </Box>
+                    <div ref={messagesEndRef} />
                   </ListItem>
                 ))}
               </List>
