@@ -69,7 +69,7 @@ export default function GrantResults() {
           onKeyDown={handleKeyPress}
           sx={{ flexGrow: 1, maxWidth: '1000px', mr: 2 }} // Adjust the maxWidth as needed for your design
         />
-        <Button variant="contained" onClick={handleTalkToGrantsClick} sx={{ whiteSpace: 'nowrap' }}>
+        <Button variant="contained" onClick={handleTalkToGrantsClick} disabled={selectedOpportunities.length === 0}>
           Talk to grants
         </Button>
       </Box>

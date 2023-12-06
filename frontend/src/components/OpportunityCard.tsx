@@ -1,7 +1,7 @@
-import { Opportunity } from "../types/apiTypes";
 import React, { useState } from 'react';
 import { Card, Checkbox, Typography, Accordion, AccordionSummary, AccordionDetails, CardHeader } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Opportunity } from "../types/apiTypes";
 
 export interface OpportunityCardProps {
   opportunity: Opportunity;
@@ -32,6 +32,7 @@ export default function OpportunityCard({ opportunity, onCheckboxChange }: Oppor
             id={`checkbox-${opportunity.OpportunityID}`}
           />
         }
+        sx={{"& .MuiCardHeader-content": { width: '80%' }}}
         title={<Typography variant="subtitle1" noWrap>{opportunity.OpportunityTitle}</Typography>}
         titleTypographyProps={{ variant: 'body2' }}
       />

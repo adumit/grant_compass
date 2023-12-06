@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, KeyboardEvent } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { Grid, TextField, Button, List, ListItem, ListItemText, Paper, Box, Typography, Divider } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
@@ -16,6 +16,7 @@ export default function GrantsPage() {
   const [chatInput, setChatInput] = useState('');
   const [messages, setMessages] = useState<Array<Message>>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatInputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -31,6 +32,14 @@ export default function GrantsPage() {
         .then(setSelectedOpportunities);
     }
   }, [searchParams, selectedOpportunities])
+
+  // Filter key presses and send message if the use presses Enter
+  const handleKeyPress = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+      chatInputRef.current?.blur(); // Blur focus on text field to close mobile keyboard
+    }
+  };
 
   const handleSendMessage = () => {
     if (!chatInput.trim()) return;
@@ -117,11 +126,12 @@ export default function GrantsPage() {
             </Box>
             <Box sx={{ mt: 2 }}>
               <TextField
+                inputRef={chatInputRef}
                 fullWidth
                 variant="outlined"
                 value={chatInput}
                 onChange={e => setChatInput(e.target.value)}
-                onKeyDown={e => { if (e.key === "Enter") handleSendMessage(); }}
+                onKeyDown={handleKeyPress}
                 placeholder="Type your message here"
                 sx={{ mb: 1 }}
               />
